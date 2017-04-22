@@ -8,12 +8,18 @@ public class Player : MonoBehaviour {
 	public float maxSpeed = 5;
 	public float currentSpeed;
 	public float accerlation = 1;
+	public float minPushback = -0.5f;
+	public float throwStrength = 1;
 	PlayerController controller;
 	Camera viewCamera;
+	ThrowSimulation throwSim;
+
+
 	void Start() {
 		controller = GetComponent<PlayerController> ();
 		viewCamera = Camera.main;
 		currentSpeed = 0;
+		throwSim = GetComponent<ThrowSimulation> ();
 	}
 
 	void Update () {
@@ -31,6 +37,8 @@ public class Player : MonoBehaviour {
 				currentSpeed = 0;
 			}
 		}
+			
+
 		Vector3 velocity = input.normalized * currentSpeed;
 		//controller.Move (velocity);
 		controller.MoveForward(currentSpeed);
@@ -46,9 +54,33 @@ public class Player : MonoBehaviour {
 		}
 	}
 
+	public Vector3 GetVelocity(){
+		return transform.forward * currentSpeed;
+	}
+
 	void OnCollisionEnter(Collision collision){
 		Debug.Log ("collision");
 		Debug.Log (collision.gameObject.name);
+		Vector3 myVelocity = GetVelocity ();
+
+		if (collision.gameObject.name == "Enemy") {
+			Enemy enemy = collision.gameObject.GetComponent<Enemy> ();
+			currentSpeed = 0;
+			Vector3 target;
+
+
+			if (enemy.GetVelocity ().magnitude <= 0.1f) {
+				Debug.Log ("getting pushed back");
+
+				target = transform.position + (transform.forward * minPushback);
+				Debug.Log (target.ToString ());
+				controller.Launch (target);
+			} else {
+				target = enemy.GetVelocity () * throwStrength + transform.position;
+				controller.Launch (target);
+			}
+
+		}
 
 		//If colliding with enemy
 		//Stop Movement
