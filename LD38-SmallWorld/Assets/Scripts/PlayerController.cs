@@ -20,9 +20,6 @@ public class PlayerController : MonoBehaviour {
 	
 
 	void FixedUpdate () {
-		if (myRigidbody.position.y <= 1.01f) {
-			grounded = true;
-		}
 		//Standard Move
 		if (grounded) {
 			myRigidbody.MovePosition (myRigidbody.position + velocity * Time.fixedDeltaTime);
@@ -44,7 +41,9 @@ public class PlayerController : MonoBehaviour {
 
 	public void Launch (Vector3 target){
 		grounded = false;
+		Debug.Log("Launching from " + transform.position +" to " + target.ToString());
 		StartCoroutine (throwSim.SimulateProjectile (target));
+		Debug.Log("New Posisition " + transform.position.ToString());
 
 	}
 
@@ -55,5 +54,10 @@ public class PlayerController : MonoBehaviour {
 			Vector3 correctedPoint = new Vector3 (lookPoint.x, transform.position.y, lookPoint.z);
 			transform.LookAt (correctedPoint);
 		}
+	}
+
+	public void Ground(){
+
+	grounded = true;
 	}
 }

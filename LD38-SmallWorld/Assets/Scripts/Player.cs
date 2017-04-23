@@ -64,22 +64,29 @@ public class Player : MonoBehaviour {
 		Vector3 myVelocity = GetVelocity ();
 
 		if (collision.gameObject.name == "Enemy") {
+			Debug.Log("Should Launch");
 			Enemy enemy = collision.gameObject.GetComponent<Enemy> ();
 			currentSpeed = 0;
 			Vector3 target;
 
 
-			if (enemy.GetVelocity ().magnitude <= 0.1f) {
-				Debug.Log ("getting pushed back");
-
-				target = transform.position + (transform.forward * minPushback);
-				Debug.Log (target.ToString ());
+			//if (enemy.GetVelocity ().magnitude <= 0.01f) {
+			//	Debug.Log ("getting pushed back");
+//
+//				target = transform.position + (transform.forward * minPushback);
+//				Debug.Log (target.ToString ());
+//				controller.Launch (target);
+//			} else {
+				Debug.Log("Enemy velocity " + enemy.GetVelocity().ToString());
+				target = enemy.GetVelocity () * enemy.preCollisionSpeed * throwStrength + transform.position;
 				controller.Launch (target);
-			} else {
-				target = enemy.GetVelocity () * throwStrength + transform.position;
-				controller.Launch (target);
-			}
+//			}
 
+		}
+
+		if(collision.gameObject.tag == "Ground"){
+
+			controller.Ground();
 		}
 
 		//If colliding with enemy
