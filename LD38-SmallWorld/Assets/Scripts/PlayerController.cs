@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour {
 	void Start () {
 		myRigidbody = GetComponent<Rigidbody> ();
 		throwSim = GetComponent<ThrowSimulation> ();
+
 	}
 	
 
@@ -24,7 +25,7 @@ public class PlayerController : MonoBehaviour {
 		if (grounded) {
 			myRigidbody.MovePosition (myRigidbody.position + velocity * Time.fixedDeltaTime);
 		}
-		//Launched Move
+
 
 	}
 
@@ -59,5 +60,9 @@ public class PlayerController : MonoBehaviour {
 	public void Ground(){
 
 	grounded = true;
+	}
+
+	public bool isGrounded(){
+		return grounded;
 	}
 }

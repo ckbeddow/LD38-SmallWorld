@@ -5,16 +5,19 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour {
 
 	bool grounded;
+	bool movementEnabled;
 	public Transform player;
 	Vector3 lastKnown;
 	Vector3 velocity;
 	Rigidbody myRigidbody;
 	ThrowSimulation throwSim;
 	void Start () {
-			grounded = true;
+			grounded = false;
 			myRigidbody = GetComponent<Rigidbody>();
 			//lastKnown = transform.position;
 			throwSim = GetComponent<ThrowSimulation>();
+			movementEnabled = true;
+
 	}
 
 	// Update is called once per frame
@@ -22,11 +25,11 @@ public class EnemyController : MonoBehaviour {
 		
 	}
 	void FixedUpdate () {
-		if (myRigidbody.position.y <= 1.01f) {
-			grounded = true;
-		}
+//		if (myRigidbody.position.y <= 1.01f) {
+//			grounded = true;
+//		}
 		//Standard Move
-		if (grounded) {
+		if (grounded && movementEnabled) {
 			myRigidbody.MovePosition (myRigidbody.position + velocity * Time.fixedDeltaTime);
 		}
 		
@@ -63,5 +66,13 @@ public class EnemyController : MonoBehaviour {
 		grounded = false;
 		StartCoroutine (throwSim.SimulateProjectile (target));
 
+	}
+
+	public void SetGrounded(bool _grounded){
+		grounded = _grounded;
+	}
+
+	public void disableMovment() {
+		movementEnabled = false;
 	}
 }
